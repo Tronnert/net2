@@ -1,0 +1,29 @@
+enable
+configure terminal
+
+hostname rt0
+
+interface GigabitEthernet0/0
+no shutdown
+ip address 10.90.0.2 255.255.255.252
+ip nat inside
+
+interface GigabitEthernet1/0
+no shutdown
+ip address 203.0.113.1 255.255.255.252
+ip nat outside
+
+ip nat inside source list 1 interface GigabitEthernet1/0 overload
+ip nat inside source static tcp 10.70.0.2 80 203.0.113.1 80
+ip nat inside source static tcp 10.70.0.2 443 203.0.113.1 443
+
+ip route 0.0.0.0 0.0.0.0 203.0.113.2 
+ip route 10.10.0.0 255.255.255.0 10.90.0.1
+ip route 10.20.0.0 255.255.255.0 10.90.0.1
+ip route 10.30.0.0 255.255.255.0 10.90.0.1
+ip route 10.40.0.0 255.255.255.0 10.90.0.1
+ip route 10.50.0.0 255.255.255.0 10.90.0.1
+ip route 10.60.0.0 255.255.255.0 10.90.0.1
+ip route 10.70.0.0 255.255.255.0 10.90.0.1
+ip route 10.80.0.0 255.255.255.0 10.90.0.1
+

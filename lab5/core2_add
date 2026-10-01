@@ -1,0 +1,31 @@
+ip access-list extended ACL_MANAGEMENT
+permit ip 10.50.0.0 0.0.0.255 10.30.0.0 0.0.0.255
+permit ip 10.50.0.0 0.0.0.255 10.70.0.0 0.0.0.255
+permit ip any any
+
+ip access-list extended ACL_ACCOUNTING
+permit ip 10.60.0.0 0.0.0.255 10.30.0.0 0.0.0.255
+permit ip 10.60.0.0 0.0.0.255 10.70.0.0 0.0.0.255
+permit ip any any
+
+ip access-list extended ACL_OTHER_PC
+permit ip 10.80.0.0 0.0.0.255 10.30.0.0 0.0.0.255
+permit ip 10.80.0.0 0.0.0.255 10.70.0.0 0.0.0.255
+deny ip 10.80.0.0 0.0.0.255 10.60.0.0 0.0.0.255
+permit ip any any
+
+ip access-list extended ACL_IP_PHONES
+permit ip 10.20.0.0 0.0.0.255 host 10.70.0.2
+deny ip 10.20.0.0 0.0.0.255 any
+
+interface Vlan20
+ip access-group ACL_IP_PHONES in
+
+interface Vlan50
+ip access-group ACL_MANAGEMENT in
+
+interface Vlan60
+ip access-group ACL_ACCOUNTING in
+
+interface Vlan80
+ip access-group ACL_OTHER_PC in

@@ -1,0 +1,54 @@
+enable
+configure terminal
+
+hostname rt2
+
+interface GigabitEthernet0/0/0
+no shutdown
+ip address 10.90.0.2 255.255.255.252
+ip nat inside
+
+interface GigabitEthernet0/0/2
+no shutdown
+ip address 203.0.113.1 255.255.255.252
+ip nat outside
+
+ip nat inside source static tcp 10.70.0.2 80 203.0.113.1 80
+ip nat inside source static tcp 10.70.0.2 443 203.0.113.1 443
+
+ip route 0.0.0.0 0.0.0.0 203.0.113.2 
+ip route 10.10.0.0 255.255.255.0 10.90.0.1
+ip route 10.20.0.0 255.255.255.0 10.90.0.1
+ip route 10.30.0.0 255.255.255.0 10.90.0.1
+ip route 10.40.0.0 255.255.255.0 10.90.0.1
+ip route 10.50.0.0 255.255.255.0 10.90.0.1
+ip route 10.60.0.0 255.255.255.0 10.90.0.1
+ip route 10.70.0.0 255.255.255.0 10.90.0.1
+ip route 10.80.0.0 255.255.255.0 10.90.0.1
+
+access-list 110 deny   ip 10.0.0.0 0.255.255.255 172.16.0.0 0.0.255.255
+access-list 110 permit ip 10.0.0.0 0.255.255.255 any
+ip nat inside source list 110 interface GigabitEthernet0/0/2 overload
+
+access-list 101 permit ip 10.0.0.0 0.255.255.255 172.16.0.0 0.0.255.255
+
+crypto isakmp policy 10
+encryption aes 256
+hash sha
+authentication pre-share
+group 2
+lifetime 86400
+crypto isakmp key VPNkey123 address 203.0.113.6
+
+crypto ipsec transform-set TS esp-aes 256 esp-sha-hmac
+
+crypto map VPN-MAP 10 ipsec-isakmp
+description VPN to office 3
+set peer 203.0.113.6
+set transform-set TS
+match address 101
+
+interface GigabitEthernet0/0/2
+crypto map VPN-MAP
+end
+write memory

@@ -1,0 +1,47 @@
+enable
+configure terminal
+
+hostname sw0
+
+vlan 10
+name WEBCAM
+vlan 20
+name IP_PHONES
+vlan 30
+name PRINTERS
+vlan 40
+name WIFI_AP
+vlan 50
+name MANAGEMENT_PC
+vlan 60
+name ACCOUNTING
+vlan 70
+name SERVERS
+vlan 80
+name OTHER_PC
+interface range fa0/18
+switchport mode access
+switchport access vlan 10
+
+interface range fa0/3,fa0/5,fa0/6,fa0/8,fa0/13-16,fa0/21,fa0/23
+switchport mode access
+switchport access vlan 20
+
+interface fa0/20
+switchport mode access
+switchport access vlan 30
+
+interface range fa0/2,fa0/9-11,fa0/17
+switchport mode access
+switchport access vlan 50
+
+interface range fa0/1,fa0/4,fa0/7,fa0/19
+switchport mode access
+switchport access vlan 60
+
+interface fa0/12
+switchport mode access
+switchport access vlan 80
+
+end
+write memory

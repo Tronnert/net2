@@ -1,0 +1,32 @@
+enable
+configure terminal
+
+hostname sw3
+
+vlan 10
+name WEBCAM
+vlan 20
+name IP_PHONES
+vlan 30
+name PRINTERS
+vlan 40
+name WIFI_AP
+vlan 50
+name MANAGEMENT_PC
+vlan 60
+name ACCOUNTING
+vlan 70
+name SERVERS
+vlan 80
+name OTHER_PC
+
+interface fa0/1
+switchport mode access
+switchport access vlan 10
+
+interface fa0/3
+switchport mode access
+switchport access vlan 30
+
+end
+write memory
